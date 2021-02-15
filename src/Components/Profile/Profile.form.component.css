@@ -1,0 +1,19 @@
+li {
+  list-style-type: none;
+}
+
+input[type=checkbox] {
+  margin: 5px;
+}
+
+.danceItem {
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.danceItem:nth-child(odd) {
+  background: rgba(155,155,155,0.2);
+}
