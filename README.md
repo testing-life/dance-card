@@ -8,6 +8,8 @@ An app allowing dancers to manage their profile, find other dancers around them 
 
 <img src='https://gitlab.com/hussariush/dance-card/uploads/6482c972d21298659655e11f3e8f3d61/dc4.png' alt="screenshot of a user's profile" width="250"/>
 
+Tech stack: CRA, Firebase, React, Geofirestore, Leaflet, TypeScript, Geolocation API
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
