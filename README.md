@@ -1,3 +1,13 @@
+# Dance Card WIP
+
+An app allowing dancers to manage their profile, find other dancers around them and get in touch to arrange a dance session.
+
+<img src='https://gitlab.com/hussariush/dance-card/uploads/9462088686869d8f19433acae802b2ba/dc2.png' alt='screenshot of a radius on a map' width="250"/>
+
+<img src='https://gitlab.com/hussariush/dance-card/uploads/25ea805b3b0c7b548ec37e4d7918f49a/dc6.png' alt='screenshot of a list of messages from two users' width="250"/>
+
+<img src='https://gitlab.com/hussariush/dance-card/uploads/6482c972d21298659655e11f3e8f3d61/dc4.png' alt="screenshot of a user's profile" width="250"/>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
