@@ -8,21 +8,22 @@ const NotificationComponent: FunctionComponent = () => {
   const { msg } = useMsgNotification();
   const { user } = useUser();
 
-  const lastMessage = msg?.exists
-    ? msg?.data().messages[msg?.data().messages.length - 1].message
-    : undefined;
+  const lastMessage = msg?.exists ? msg?.data().messages[msg?.data().messages.length - 1] : undefined;
+  const lastMessageSenderId = lastMessage?.fromID;
+  const fromMe = lastMessageSenderId === user.uid ? true : false;
+
   return (
     <Fragment>
-      {lastMessage && (
+      {lastMessage && !fromMe ? (
         <Fragment>
           <span>
-            Latest message: <strong>{lastMessage}</strong>{' '}
+            Latest message: <strong>{lastMessage.message}</strong>{' '}
           </span>
           <Link to={ROUTES.SINGLE_CHAT} state={{ targetChatID: msg.id }}>
             Go to chat
           </Link>
         </Fragment>
-      )}
+      ) : null}
     </Fragment>
   );
 };
