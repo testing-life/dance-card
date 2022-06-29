@@ -11,17 +11,12 @@ type Props = {
   firebase: Firebase;
 };
 
-export const SignUpComponent: FunctionComponent<Props> = ({
-  firebase,
-}: Props) => {
+export const SignUpComponent: FunctionComponent<Props> = ({ firebase }: Props) => {
   const { register, handleSubmit, errors } = useForm();
   const { location, locationError } = useGeo();
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const getGeoPoint: (
-    latitude: number,
-    longitude: number
-  ) => firebase.firestore.GeoPoint = (latitude, longitude) => {
+  const getGeoPoint: (latitude: number, longitude: number) => firebase.firestore.GeoPoint = (latitude, longitude) => {
     return firebase.getGeoPoint(latitude, longitude);
   };
 
@@ -44,10 +39,10 @@ export const SignUpComponent: FunctionComponent<Props> = ({
             .doc(res.user.uid)
             .set(doc)
             .then(
-              (docRef) => {
+              docRef => {
                 navigate(ROUTES.LOG_IN);
               },
-              (error) => setError(error)
+              error => setError(error),
             );
         }
       })
@@ -59,27 +54,9 @@ export const SignUpComponent: FunctionComponent<Props> = ({
       <br />
       {Object.entries(location).length !== 0 ? (
         <form onSubmit={handleSubmit(submitHandler)}>
-          <input
-            required
-            name="username"
-            type="text"
-            placeholder="username"
-            ref={register({ required: true })}
-          />
-          <input
-            required
-            name="email"
-            type="email"
-            placeholder="email"
-            ref={register({ required: true })}
-          />
-          <input
-            required
-            name="password"
-            type="password"
-            placeholder="password"
-            ref={register({ required: true })}
-          />
+          <input required name="username" type="text" placeholder="username" ref={register({ required: true })} />
+          <input required name="email" type="email" placeholder="email" ref={register({ required: true })} />
+          <input required name="password" type="password" placeholder="password" ref={register({ required: true })} />
           {errors.email && <p>email is required</p>}
           {error && <p>{error}</p>}
           <button type="submit">Register</button>
@@ -88,6 +65,18 @@ export const SignUpComponent: FunctionComponent<Props> = ({
         <p>
           {locationError.message}, {locationError.code}. <br />
           {ErrorMessages.get(locationError.code)}
+          <br />
+          <a href="https://browserhow.com/how-to-enable-disable-geolocation-access-in-google-chrome/" target="_blank">
+            Enable geolocation in Chrome
+          </a>
+          <br />
+          <a href="https://browserhow.com/how-to-enable-or-disable-location-access-in-apple-safari/" target="_blank">
+            Enable geolocation in Safari
+          </a>
+          <br />
+          <a href="https://support.mozilla.org/en-US/kb/site-permissions-panel/" target="_blank">
+            Enable geolocation in Firefox
+          </a>
         </p>
       )}
     </div>
