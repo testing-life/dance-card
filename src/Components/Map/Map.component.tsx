@@ -22,6 +22,7 @@ type Props = {
   centre: LatLngLiteral;
   markers: GeoFirestoreTypes.QueryDocumentSnapshot[];
   radius: number;
+  userActive: boolean;
 };
 
 export const LeafletMap = (props: Props) => {
@@ -37,48 +38,35 @@ export const LeafletMap = (props: Props) => {
   // };
 
   return (
-    <Map
-      style={{ width: '100%', height: '90vw' }}
-      center={props.centre}
-      zoom={13}
-    >
+    <Map style={{ width: '100%', height: '90vw' }} center={props.centre} zoom={13}>
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      <Marker opacity={0.5} position={props.centre}>
+      <Marker opacity={props.userActive ? 1 : 0.5} position={props.centre}>
         <Popup>You're here</Popup>
       </Marker>
-      <Circle
-        center={props.centre}
-        fillColor="blue"
-        radius={props.radius * 1000}
-      />
-      {props.markers.map(
-        (item: GeoFirestoreTypes.QueryDocumentSnapshot, index: number) => {
-          const { coordinates, username, dances, uid } = item.data() as Profile;
-          const mapCoords = (coordinates: any): LatLngLiteral => {
-            return { lat: coordinates.latitude, lng: coordinates.longitude };
-          };
+      <Circle center={props.centre} fillColor="blue" radius={props.radius * 1000} />
+      {props.markers.map((item: GeoFirestoreTypes.QueryDocumentSnapshot, index: number) => {
+        const { coordinates, username, dances, uid } = item.data() as Profile;
+        const mapCoords = (coordinates: any): LatLngLiteral => {
+          return { lat: coordinates.latitude, lng: coordinates.longitude };
+        };
 
-          return (
-            <Marker key={index} position={mapCoords(coordinates)}>
-              <Popup>
-                <strong>{username}</strong>
-                <br />
-                <CustomPopup dances={dances} />
-                <Link
-                  to={ROUTES.CHATS}
-                  state={{ targetUserID: uid, targetUsername: username }}
-                >
-                  Message
-                </Link>
-              </Popup>
-            </Marker>
-          );
-        }
-      )}
+        return (
+          <Marker key={index} position={mapCoords(coordinates)}>
+            <Popup>
+              <strong>{username}</strong>
+              <br />
+              <CustomPopup dances={dances} />
+              <Link to={ROUTES.CHATS} state={{ targetUserID: uid, targetUsername: username }}>
+                Message
+              </Link>
+            </Popup>
+          </Marker>
+        );
+      })}
     </Map>
   );
 };

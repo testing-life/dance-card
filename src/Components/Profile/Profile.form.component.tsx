@@ -25,11 +25,11 @@ const ProfileFormComponent: FunctionComponent<Props> = ({ firebase }) => {
         .doc(user.uid)
         .set(data, { merge: true })
         .then(
-          (docRef) => {
+          docRef => {
             setProfile(data);
             navigate(ROUTES.HOME);
           },
-          (error: Error) => setError(error.message)
+          (error: Error) => setError(error.message),
         );
     }
   };
@@ -54,24 +54,13 @@ const ProfileFormComponent: FunctionComponent<Props> = ({ firebase }) => {
           <li>
             <label>
               email
-              <input
-                type="email"
-                defaultValue={profile.email}
-                placeholder="email"
-                name="email"
-                ref={register}
-              />
+              <input type="email" defaultValue={profile.email} placeholder="email" name="email" ref={register} />
             </label>
           </li>
           <li>
             <label>
               Active
-              <input
-                type="checkbox"
-                defaultChecked={profile.active}
-                ref={register}
-                name="active"
-              />
+              <input type="checkbox" defaultChecked={profile.active} ref={register} name="active" />
             </label>
           </li>
           {!!Object.keys(profile).length &&
@@ -81,38 +70,37 @@ const ProfileFormComponent: FunctionComponent<Props> = ({ firebase }) => {
               return (
                 <li key={index} className={`danceItem`}>
                   <b className="">{danceName}</b>
-                    <div className="">
-                      <label htmlFor={`${danceName}-lead`}>
-                        <span>Lead</span>
-                        <input
-                          type="checkbox"
-                          ref={register}
-                          id={`${danceName}-lead`}
-                          defaultChecked={positionsObj.lead}
-                          name={`dances.${danceName}.lead`}
-                        />
-                      </label>
-                    </div>
-                    <div className="">
-                      <label htmlFor={`${danceName}-follow`}>
-                        <span>Follow</span>
-                        <input
-                          type="checkbox"
-                          ref={register}
-                          id={`${danceName}-follow`}
-                          defaultChecked={positionsObj.follow}
-                          name={`dances.${danceName}.follow`}
-                        />
-                      </label>
-                    </div>
+                  <div className="">
+                    <label htmlFor={`${danceName}-lead`}>
+                      <span>Lead</span>
+                      <input
+                        type="checkbox"
+                        ref={register}
+                        id={`${danceName}-lead`}
+                        defaultChecked={positionsObj.lead}
+                        name={`dances.${danceName}.lead`}
+                      />
+                    </label>
+                  </div>
+                  <div className="">
+                    <label htmlFor={`${danceName}-follow`}>
+                      <span>Follow</span>
+                      <input
+                        type="checkbox"
+                        ref={register}
+                        id={`${danceName}-follow`}
+                        defaultChecked={positionsObj.follow}
+                        name={`dances.${danceName}.follow`}
+                      />
+                    </label>
+                  </div>
                 </li>
               );
             })}
         </ul>
         <button type="submit">Update</button>
       </form>
-      {!!Object.keys(errors).length &&
-        console.log(errors, ' errors in form comp')}
+      {!!Object.keys(errors).length && console.log(errors, ' errors in form comp')}
       {!!Object.keys(errors).length && <p>{error}</p>}
     </div>
   );
