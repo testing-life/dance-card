@@ -32,18 +32,14 @@ class Firebase {
   }
 
   doAnonymousSignIn = () => this.auth.signInAnonymously();
-  doEmailRegistration = (email: string, password: string) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+  doEmailRegistration = (email: string, password: string) => this.auth.createUserWithEmailAndPassword(email, password);
   doSignOut = () => this.auth.signOut();
   onAuthStateChanged = (user: any) => this.auth.onAuthStateChanged(user);
-  doEmailSignIn = (email: string, password: string) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+  doEmailSignIn = (email: string, password: string) => this.auth.signInWithEmailAndPassword(email, password);
   getCurrentUser = () => this.auth.currentUser;
-  getUsers = (): GeoCollectionReference =>
-    this.geofirestore.collection(Collections.Users);
+  getUsers = (): GeoCollectionReference => this.geofirestore.collection(Collections.Users);
   getChats = () => this.firestore.collection(Collections.Chats);
-  getGeoPoint = (latitude: number, longitude: number) =>
-    new this.firestoreRef.GeoPoint(latitude, longitude);
+  getGeoPoint = (latitude: number, longitude: number) => new this.firestoreRef.GeoPoint(latitude, longitude);
 }
 export default Firebase;
 

@@ -13,6 +13,8 @@ type Props = {
   firebase: Firebase;
 };
 
+const tickerDuration = 10;
+
 export const HomeComponent: FunctionComponent<any> = ({ firebase }: Props) => {
   const { location, locationError } = useGeo();
   const { user } = useUser();
@@ -20,13 +22,14 @@ export const HomeComponent: FunctionComponent<any> = ({ firebase }: Props) => {
   const [error, setError] = useState<string>();
   const [localUsers, setLocalUsers] = useState<GeoFirestoreTypes.QueryDocumentSnapshot[]>([]);
   const [radius, setRadius] = useState<number>(2);
+  const [locationUpdateTicker, setLocationUpdateTicker] = useState(0);
+
   const fetchLocalUsers = (place: LatLngLiteral, radius: number) => {
     const geoPoint = place && firebase.getGeoPoint(place.lat, place.lng);
     // const geoPoint = place && firebase.getGeoPoint(DEV_LOCATION.lat, DEV_LOCATION.lng);
     const query: GeoQuery = firebase.getUsers().near({ center: geoPoint, radius });
     query.onSnapshot((res: GeoQuerySnapshot) => {
       const usersWithoutCurrentUser = res.docs.filter(u => u.id !== user.uid).filter(user => user.data().active);
-
       setLocalUsers(usersWithoutCurrentUser);
     });
   };
@@ -40,6 +43,32 @@ export const HomeComponent: FunctionComponent<any> = ({ firebase }: Props) => {
       fetchLocalUsers(location, radius);
     }
   }, [location, radius, locationError]);
+
+  const getGeoPoint: (latitude: number, longitude: number) => firebase.firestore.GeoPoint = (latitude, longitude) => {
+    return firebase.getGeoPoint(latitude, longitude);
+  };
+
+  useEffect(() => {
+    if (locationUpdateTicker <= tickerDuration) {
+      setLocationUpdateTicker(locationUpdateTicker + 1);
+    } else {
+      const newProfile: Profile = {
+        ...profile,
+        coordinates: getGeoPoint(location.lat, location.lng),
+      };
+      firebase
+        .getUsers()
+        .doc(user.uid)
+        .set(newProfile, { merge: true })
+        .then(
+          docRef => {
+            setProfile(newProfile);
+          },
+          (error: Error) => setError(error.message),
+        );
+      setLocationUpdateTicker(locationUpdateTicker + 1);
+    }
+  }, [location]);
 
   const toggleVisiblity = () => {
     const newProfile: Profile = { ...profile, active: !profile.active };
@@ -66,6 +95,10 @@ export const HomeComponent: FunctionComponent<any> = ({ firebase }: Props) => {
           Toggle visibility
         </button>
       </div>
+      <div>
+        lat: {location.lat}
+        lng: {location.lng}
+      </div>
       <div className="row">
         <span>Search radius: {radius}km</span>
         <input
@@ -74,7 +107,7 @@ export const HomeComponent: FunctionComponent<any> = ({ firebase }: Props) => {
           defaultValue={radius}
           min="1"
           step="1"
-          max="20"
+          max="2000"
           onChange={radiusSliderHandler}
         />
       </div>

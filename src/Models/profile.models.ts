@@ -1,3 +1,4 @@
+import firebase from 'firebase';
 import Dances, { Dance, DanceMap } from '../Constants/dances';
 
 export type IProfile = {
@@ -14,7 +15,7 @@ export type IProfile = {
 export class Profile implements IProfile {
   username = '';
   email = '';
-  coordinates = undefined;
+  coordinates = new firebase.firestore.GeoPoint(0, 0);
   active = true;
   chats = [];
   readonly uid = '';
