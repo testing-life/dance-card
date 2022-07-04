@@ -38,7 +38,14 @@ export const LeafletMap = (props: Props) => {
   // };
 
   return (
-    <Map style={{ width: '100%', height: '90vw' }} center={props.centre} zoom={13}>
+    <Map
+      style={{ width: '100%', height: '90vw' }}
+      maximumAge={1000}
+      timeout={2000}
+      watch={true}
+      center={props.centre}
+      zoom={13}
+    >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

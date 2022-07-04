@@ -17,7 +17,14 @@ export const GeolocationProvider = ({ ...props }: Props) => {
   const [locationError, setLocationError] = useState<PositionError>({} as PositionError);
   let mounted = true;
 
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
   const onChange = ({ coords }: any) => {
+    console.log('coords', coords);
     if (mounted) {
       setLocation({
         lat: coords.latitude,
@@ -32,8 +39,8 @@ export const GeolocationProvider = ({ ...props }: Props) => {
 
   useEffect(() => {
     let watchId: any = undefined;
-    navigator.geolocation.getCurrentPosition(onChange, onError);
-    watchId = navigator.geolocation.watchPosition(onChange, onError, { enableHighAccuracy: true });
+    navigator.geolocation.getCurrentPosition(onChange, onError, options);
+    watchId = navigator.geolocation.watchPosition(onChange, onError, options);
 
     return () => {
       mounted = false;
